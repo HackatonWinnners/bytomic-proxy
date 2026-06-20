@@ -329,14 +329,6 @@
   var root = document.getElementById('dc-root');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // style-hover: additive inline styles on hover, restored on leave.
-  root.querySelectorAll('[style-hover]').forEach(function (el) {
-    var base = el.getAttribute('style') || '';
-    var hov = el.getAttribute('style-hover');
-    el.addEventListener('mouseenter', function () { el.setAttribute('style', base + ';' + hov); });
-    el.addEventListener('mouseleave', function () { el.setAttribute('style', base); });
-  });
-
   function setFinal(el) {
     var t = parseFloat(el.getAttribute('data-count'));
     var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
@@ -385,17 +377,6 @@
   window.addEventListener('scroll', checkReveal, { passive: true });
   window.addEventListener('resize', checkReveal);
   setTimeout(function () { revealEls.forEach(function (el) { if (!el.__revealed) reveal(el); }); }, 2500);
-
-  // magnetic buttons
-  root.querySelectorAll('[data-magnetic]').forEach(function (btn) {
-    btn.addEventListener('mousemove', function (ev) {
-      var r = btn.getBoundingClientRect();
-      var x = ev.clientX - r.left - r.width / 2;
-      var y = ev.clientY - r.top - r.height / 2;
-      btn.style.transform = 'translate(' + (x * 0.28) + 'px,' + (y * 0.4) + 'px)';
-    });
-    btn.addEventListener('mouseleave', function () { btn.style.transform = 'translate(0,0)'; });
-  });
 
   // hero wire scale-to-fit
   var stage = root.querySelector('[data-wire-stage]');
