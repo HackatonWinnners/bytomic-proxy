@@ -26,6 +26,10 @@
   @keyframes stamp402{0%{opacity:0;transform:scale(.5)}18%{opacity:0;transform:scale(.5)}21%{opacity:1;transform:scale(1.18)}25%{transform:scale(1)}31%{opacity:1}34%{opacity:0;transform:scale(1)}100%{opacity:0}}
   @keyframes coinFloat{0%{opacity:0;transform:translateY(0)}80%{opacity:0;transform:translateY(0)}83%{opacity:1}93%{opacity:0;transform:translateY(-36px)}100%{opacity:0;transform:translateY(-36px)}}
   @keyframes ledgerDrop{0%{opacity:0;transform:translateY(-8px)}78%{opacity:0;transform:translateY(-8px)}81%{opacity:1;transform:translateY(0)}94%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
+  @keyframes slideReveal{from{opacity:0;transform:translateY(34px);filter:blur(9px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+  .reveal-go{animation:slideReveal .72s cubic-bezier(.22,.72,.2,1) both}
+  .wd{display:inline-block}
+  @media (prefers-reduced-motion:reduce){.reveal-go{animation:none}}
 
   #deck{position:fixed;inset:0;background:#06090d}
   #deck > section{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform-origin:center;display:none}
@@ -260,11 +264,60 @@
     var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     slides.forEach(function (sl) { sl.style.transform = 'translate(-50%,-50%) scale(' + s + ')'; });
   }
+  // split a solid-color headline into per-word spans for a drop cascade.
+  // gradient headlines (background-clip:text) are skipped — splitting kills the gradient.
+  function splitWords(h) {
+    if (/text-fill-color\s*:\s*transparent/.test(h.getAttribute('style') || '')) return;
+    var nodes = Array.prototype.slice.call(h.childNodes), units = [];
+    h.textContent = '';
+    nodes.forEach(function (node) {
+      if (node.nodeType === 3) {
+        node.textContent.split(/(\s+)/).forEach(function (p) {
+          if (p === '') return;
+          if (/^\s+$/.test(p)) { h.appendChild(document.createTextNode(p)); return; }
+          var s = document.createElement('span'); s.className = 'wd'; s.textContent = p;
+          h.appendChild(s); units.push(s);
+        });
+      } else if (node.nodeType === 1) {
+        node.className = (node.className ? node.className + ' ' : '') + 'wd';
+        h.appendChild(node); units.push(node);
+      } else { h.appendChild(node); }
+    });
+    h.__words = units;
+  }
+  slides.forEach(function (s) { var h = s.querySelector('h1, h2'); if (h) splitWords(h); });
+
+  var lastTargets = [];
+  function revealTargets(sec) {
+    var out = [];
+    Array.prototype.forEach.call(sec.children, function (el) {
+      var p = el.style.position;
+      if (p === 'absolute' || p === 'fixed') return;        // skip bg aurora/grid layers
+      if ((el.tagName === 'H1' || el.tagName === 'H2') && el.__words) {
+        el.__words.forEach(function (w) { out.push(w); });  // drop headline word-by-word
+      } else if (/grid/.test(el.style.display)) {            // stagger cards, not the grid block
+        Array.prototype.forEach.call(el.children, function (c) { out.push(c); });
+      } else { out.push(el); }
+    });
+    return out;
+  }
+  function cascade(sec) {
+    lastTargets.forEach(function (el) { el.classList.remove('reveal-go'); el.style.animationDelay = ''; });
+    var t = revealTargets(sec);
+    t.forEach(function (el) { el.style.animationDelay = ''; el.classList.remove('reveal-go'); });
+    void sec.offsetWidth;                                    // force reflow → restart animation
+    t.forEach(function (el, k) {
+      el.style.animationDelay = Math.min(k * 0.075, 0.9) + 's';
+      el.classList.add('reveal-go');
+    });
+    lastTargets = t;
+  }
   function show() {
     slides.forEach(function (sl, j) { sl.classList.toggle('active', j === i); });
     bar.style.width = ((i + 1) / slides.length * 100) + '%';
     count.textContent = (i + 1) + ' / ' + slides.length;
     fit();
+    cascade(slides[i]);
     if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
   }
   function go(n) { i = Math.max(0, Math.min(slides.length - 1, n)); show(); }
