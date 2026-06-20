@@ -8,7 +8,7 @@ export const DASHBOARD_HTML = `<!doctype html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Agent Proxy — spend ledger</title>
+<title>Bytomic Proxy — spend ledger</title>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -43,7 +43,7 @@ export const DASHBOARD_HTML = `<!doctype html>
 </head>
 <body>
 <header>
-  <h1>AGENT PROXY · x402 spend ledger</h1>
+  <h1>BYTOMIC PROXY · x402 spend ledger</h1>
   <div class="sub"><span class="dot"></span>live · pay-per-request egress for AI agents · egress IP <span id="egress" class="mono">—</span></div>
 </header>
 <div class="stats">

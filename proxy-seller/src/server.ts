@@ -74,7 +74,7 @@ if (DEV_BYPASS_KEY) {
  */
 app.get('/catalog', (_req, res) => {
   res.json({
-    name: 'Agent Proxy — pay-per-request egress',
+    name: 'Bytomic Proxy — pay-per-request egress',
     description:
       'Fetch any URL through this host\'s network. Each call is paid in USDC over x402. ' +
       'Returns the upstream response plus the egress IP the request left through.',
