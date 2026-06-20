@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bytomic Proxy — bandwidth agents can buy</title>
+<meta name="description" content="Pay-per-request proxy egress for AI agents. USDC per call over x402, settled on-chain through Circle Gateway. No keys. No plans. The wallet is the access.">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#0b0f14;color:#d7e0ea;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:rgba(22,119,255,.25);color:#eaf2ff}
+  a{color:inherit;text-decoration:none}
+  @keyframes auroraA{0%{transform:translate(-8%,-6%) scale(1)}100%{transform:translate(10%,8%) scale(1.25)}}
+  @keyframes auroraB{0%{transform:translate(6%,4%) scale(1.1)}100%{transform:translate(-10%,-8%) scale(.9)}}
+  @keyframes auroraC{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-6%,10%) scale(1.2)}}
+  @keyframes floaty{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes wirePacket1{0%{transform:translateX(0);opacity:0}2%{opacity:1}15%{transform:translateX(205px);opacity:1}17%{transform:translateX(215px);opacity:0}100%{transform:translateX(215px);opacity:0}}
+  @keyframes wireCoin{0%{opacity:0;transform:translateX(0) rotateY(0deg) scale(.7)}22%{opacity:0;transform:translateX(0) rotateY(0deg) scale(.7)}25%{opacity:1;transform:translateX(10px) rotateY(180deg) scale(1)}38%{opacity:1;transform:translateX(205px) rotateY(1400deg) scale(1)}40%{opacity:0;transform:translateX(215px) rotateY(1440deg) scale(.7)}100%{opacity:0;transform:translateX(215px)}}
+  @keyframes stamp402{0%{opacity:0;transform:scale(.5)}18%{opacity:0;transform:scale(.5)}21%{opacity:1;transform:scale(1.18)}25%{transform:scale(1)}31%{opacity:1}34%{opacity:0;transform:scale(1)}100%{opacity:0}}
+  @keyframes wireFill1{0%{transform:scaleX(0)}26%{transform:scaleX(0)}33%{transform:scaleX(1)}94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+  @keyframes wirePacket2{0%{transform:translateX(0);opacity:0}40%{transform:translateX(0);opacity:0}42%{opacity:1}55%{transform:translateX(205px);opacity:1}57%{transform:translateX(215px);opacity:0}100%{transform:translateX(215px);opacity:0}}
+  @keyframes wireFill2{0%{transform:scaleX(0)}50%{transform:scaleX(0)}57%{transform:scaleX(1)}94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+  @keyframes wireResp{0%{transform:translateX(430px);opacity:0}57%{transform:translateX(430px);opacity:0}59%{opacity:1}73%{transform:translateX(18px);opacity:1}75%{transform:translateX(0);opacity:0}100%{transform:translateX(0);opacity:0}}
+  @keyframes txType{0%{max-width:0;opacity:0}60%{max-width:0;opacity:0}61%{opacity:1}84%{max-width:168px;opacity:1}95%{max-width:168px;opacity:1}100%{max-width:0;opacity:0}}
+  @keyframes ledgerDrop{0%{opacity:0;transform:translateY(-8px)}78%{opacity:0;transform:translateY(-8px)}81%{opacity:1;transform:translateY(0)}94%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
+  @keyframes coinFloat{0%{opacity:0;transform:translateY(0)}80%{opacity:0;transform:translateY(0)}83%{opacity:1}93%{opacity:0;transform:translateY(-36px)}100%{opacity:0;transform:translateY(-36px)}}
+  @keyframes ledgerRow{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes pulseDot{0%,100%{opacity:.5;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
+  @keyframes ring{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.8);opacity:0}}
+  @keyframes counter429{0%{opacity:.4}100%{opacity:1}}
+</style>
+</head>
+<body>
+<div id="dc-root" style="position:relative;min-height:100vh;width:100%;overflow:hidden">
+
+  <!-- ===== ATMOSPHERE ===== -->
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:#0b0f14"></div>
+  <div style="position:fixed;inset:-20%;z-index:0;pointer-events:none;filter:blur(90px);opacity:.55">
+    <div style="position:absolute;top:-5%;left:8%;width:46vw;height:46vw;border-radius:50%;background:radial-gradient(circle,rgba(22,119,255,.45),transparent 62%);animation:auroraA 26s ease-in-out infinite alternate"></div>
+    <div style="position:absolute;top:6%;right:4%;width:42vw;height:42vw;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.42),transparent 62%);animation:auroraB 32s ease-in-out infinite alternate"></div>
+    <div style="position:absolute;bottom:-12%;left:32%;width:50vw;height:50vw;border-radius:50%;background:radial-gradient(circle,rgba(22,119,255,.22),transparent 64%);animation:auroraC 38s ease-in-out infinite alternate"></div>
+  </div>
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;background-image:radial-gradient(circle,rgba(125,150,180,.10) 1px,transparent 1px);background-size:30px 30px;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,#000,transparent 90%)"></div>
+
+  <div style="position:relative;z-index:2">
+
+  <!-- ===== NAV ===== -->
+  <nav style="position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(11,15,20,.62);border-bottom:1px solid #1c2530">
+    <div style="max-width:1180px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.01em">
+        <img src="assets/logo.svg" alt="Bytomic Proxy" style="width:26px;height:26px;display:block">
+        <span>Bytomic <span style="color:#4d94ff">Proxy</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:30px;font-size:14.5px;color:#9fb0c2">
+        <a href="#how" style="transition:color .2s" style-hover="color:#d7e0ea">How it works</a>
+        <a href="#ledger" style="transition:color .2s" style-hover="color:#d7e0ea">Live ledger</a>
+        <a data-magnetic href="/dashboard" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;background:#1677FF;color:#fff;font-weight:700;font-size:14px;transition:box-shadow .25s,transform .12s;box-shadow:0 0 0 0 rgba(22,119,255,.5)" style-hover="box-shadow:0 8px 30px -6px rgba(22,119,255,.7)">Launch demo →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header style="max-width:1180px;margin:0 auto;padding:96px 28px 64px;text-align:center">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;display:inline-flex;align-items:stretch;max-width:100%;border:1px solid #1c2530;border-radius:14px;background:linear-gradient(180deg,rgba(17,24,35,.72),rgba(11,15,20,.35));box-shadow:0 12px 44px -22px rgba(0,0,0,.85);overflow:hidden;margin-bottom:34px">
+      <div style="display:flex;align-items:center;gap:8px;padding:0 17px;border-right:1px solid #1c2530">
+        <span style="width:7px;height:7px;border-radius:50%;background:#1677FF;box-shadow:0 0 10px rgba(22,119,255,.9);animation:pulseDot 2s infinite"></span>
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7e8da0">Built&nbsp;with</span>
+      </div>
+      <div style="padding:11px 17px;text-align:left;transition:background .2s" style-hover="background:rgba(22,119,255,.07)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#5d6b7d">Payments</div>
+        <div style="font-size:14px;font-weight:600;color:#cdd8e6;margin-top:3px">x402</div>
+      </div>
+      <div style="width:1px;background:#1c2530"></div>
+      <div style="padding:11px 17px;text-align:left;transition:background .2s" style-hover="background:rgba(22,119,255,.07)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#5d6b7d">Asset</div>
+        <div style="font-size:14px;font-weight:600;color:#cdd8e6;margin-top:3px">USDC</div>
+      </div>
+      <div style="width:1px;background:#1c2530"></div>
+      <div style="padding:11px 17px;text-align:left;transition:background .2s" style-hover="background:rgba(22,119,255,.07)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#5d6b7d">Wallet</div>
+        <div style="font-size:14px;font-weight:600;color:#cdd8e6;margin-top:3px">Circle Agent</div>
+      </div>
+      <div style="width:1px;background:#1c2530"></div>
+      <div style="padding:11px 17px;text-align:left;transition:background .2s" style-hover="background:rgba(22,119,255,.07)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#5d6b7d">Network</div>
+        <div style="font-size:14px;font-weight:600;color:#cdd8e6;margin-top:3px">Base</div>
+      </div>
+    </div>
+    <h1 data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s .05s,transform .7s .05s;font-size:clamp(42px,7.4vw,86px);line-height:1.02;font-weight:800;letter-spacing:-.035em;max-width:14ch;margin:0 auto;background:linear-gradient(180deg,#f4f9ff,#aebccd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Bandwidth agents can buy.</h1>
+    <p data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s .12s,transform .7s .12s;font-size:clamp(16px,2vw,20px);line-height:1.55;color:#9fb0c2;max-width:60ch;margin:26px auto 0">Pay-per-request proxy egress for AI agents. USDC per call over x402, settled on-chain through Circle Gateway. <span style="color:#d7e0ea">No keys. No plans. The wallet is the access.</span></p>
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s .2s,transform .7s .2s;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px">
+      <a data-magnetic href="/dashboard" style="display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:12px;background:#1677FF;color:#fff;font-weight:700;font-size:16px;transition:box-shadow .25s,transform .12s;box-shadow:0 8px 28px -8px rgba(22,119,255,.55)" style-hover="box-shadow:0 12px 40px -6px rgba(22,119,255,.8)">▶ Launch live demo</a>
+      <a data-magnetic href="/deck" style="display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:12px;background:rgba(17,24,35,.7);border:1px solid #28323f;color:#d7e0ea;font-weight:700;font-size:16px;transition:box-shadow .25s,transform .12s,border-color .2s" style-hover="border-color:#4d94ff">View deck →</a>
+    </div>
+
+    <!-- WIRE DIAGRAM -->
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .8s .3s,transform .8s .3s;margin-top:62px">
+      <div style="position:relative;width:100%;max-width:920px;margin:0 auto;border:1px solid #1c2530;border-radius:20px;background:linear-gradient(180deg,rgba(17,24,35,.75),rgba(11,15,20,.55));box-shadow:0 30px 80px -30px rgba(0,0,0,.7);padding:20px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding:0 6px">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#6b7888;letter-spacing:.04em">bytomic://egress · live</span>
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#6b7888">Earned <span data-earned style="color:#4d94ff;font-weight:600">$0.014</span></span>
+        </div>
+        <div style="position:relative;width:100%;display:flex;justify-content:center;overflow:hidden">
+          <div data-wire-stage style="position:relative;width:880px;height:220px;transform-origin:top center;flex:none">
+
+            <!-- wires base -->
+            <div style="position:absolute;left:150px;top:85px;width:215px;height:2px;background:#22303d;border-radius:2px"></div>
+            <div style="position:absolute;left:515px;top:85px;width:215px;height:2px;background:#22303d;border-radius:2px"></div>
+            <!-- wires fill mint -->
+            <div style="position:absolute;left:150px;top:84px;width:215px;height:3px;border-radius:3px;background:linear-gradient(90deg,#4d94ff,#60a5fa);transform-origin:left center;transform:scaleX(0);box-shadow:0 0 12px rgba(22,119,255,.6);animation:wireFill1 9s linear infinite"></div>
+            <div style="position:absolute;left:515px;top:84px;width:215px;height:3px;border-radius:3px;background:linear-gradient(90deg,#60a5fa,#4d94ff);transform-origin:left center;transform:scaleX(0);box-shadow:0 0 12px rgba(96,165,250,.6);animation:wireFill2 9s linear infinite"></div>
+
+            <!-- packets -->
+            <div style="position:absolute;left:147px;top:80px;width:12px;height:12px;border-radius:50%;background:#cfe3ff;box-shadow:0 0 14px 3px rgba(207,227,255,.9);animation:wirePacket1 9s linear infinite"></div>
+            <div style="position:absolute;left:512px;top:80px;width:12px;height:12px;border-radius:50%;background:#cfe3ff;box-shadow:0 0 14px 3px rgba(207,227,255,.9);animation:wirePacket2 9s linear infinite"></div>
+            <div style="position:absolute;left:150px;top:94px;width:11px;height:11px;border-radius:50%;background:#60a5fa;box-shadow:0 0 14px 3px rgba(96,165,250,.9);animation:wireResp 9s linear infinite"></div>
+
+            <!-- USDC coin -->
+            <div style="position:absolute;left:142px;top:73px;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#9bc4ff,#1c5fbf);border:1.5px solid #4d94ff;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:8.5px;font-weight:700;color:#fff;box-shadow:0 0 16px rgba(22,119,255,.7);animation:wireCoin 9s linear infinite">USDC</div>
+
+            <!-- 402 stamp -->
+            <div style="position:absolute;left:392px;top:20px;transform-origin:center;animation:stamp402 9s linear infinite">
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1.5px solid #f87171;border-radius:8px;color:#fca5a5;font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;background:rgba(248,113,113,.08);box-shadow:0 0 18px rgba(248,113,113,.4)">402 Payment Required</span>
+            </div>
+
+            <!-- nodes -->
+            <div style="position:absolute;left:0;top:54px;width:150px;height:64px;border:1px solid #28323f;border-radius:14px;background:rgba(17,24,35,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 8px 24px -12px rgba(0,0,0,.8)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fb0c2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M7.5 10l2 2-2 2"></path><path d="M12.5 14h4"></path></svg>
+              <span style="font-size:13px;font-weight:600;color:#d7e0ea">Agent</span>
+            </div>
+            <div style="position:absolute;left:365px;top:50px;width:150px;height:72px;border:1.5px solid #1677FF;border-radius:16px;background:linear-gradient(180deg,rgba(22,119,255,.14),rgba(17,24,35,.95));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 0 30px -6px rgba(22,119,255,.55)">
+              <span style="position:absolute;inset:-1px;border-radius:16px;border:1px solid rgba(22,119,255,.5);animation:ring 2.8s ease-out infinite"></span>
+              <img src="assets/logo.svg" alt="" style="width:24px;height:24px;display:block">
+              <span style="font-size:12px;font-weight:700;color:#eaf2ff;letter-spacing:-.01em">Bytomic <span style="color:#4d94ff">Proxy</span></span>
+            </div>
+            <div style="position:absolute;left:730px;top:54px;width:150px;height:64px;border:1px solid #28323f;border-radius:14px;background:rgba(17,24,35,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 8px 24px -12px rgba(0,0,0,.8)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9fb0c2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"></path></svg>
+              <span style="font-size:13px;font-weight:600;color:#d7e0ea">Web</span>
+            </div>
+
+            <!-- $0.001 float -->
+            <div style="position:absolute;left:452px;top:40px;font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:700;color:#4d94ff;text-shadow:0 0 12px rgba(22,119,255,.6);animation:coinFloat 9s linear infinite">+$0.001</div>
+
+            <!-- tx hash typewriter -->
+            <div style="position:absolute;left:312px;top:150px;width:256px;display:flex;justify-content:center">
+              <div style="display:flex;align-items:center;gap:8px;overflow:hidden;white-space:nowrap;animation:txType 9s steps(26) infinite;max-width:0">
+                <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6b7888">x-payment-tx</span>
+                <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#60a5fa;font-weight:600">0x7a3f…e91c</span>
+              </div>
+            </div>
+            <!-- ledger row drop -->
+            <div style="position:absolute;left:300px;top:180px;width:280px;animation:ledgerDrop 9s linear infinite">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid #1c2530;border-radius:10px;background:rgba(17,24,35,.9);font-family:ui-monospace,Menlo,monospace;font-size:11px">
+                <span style="color:#9fb0c2">api.weather.gov/points</span>
+                <span style="display:flex;align-items:center;gap:8px"><span style="color:#4d94ff">200</span><span style="color:#4d94ff">$0.001</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- ===== PROBLEM ===== -->
+  <section style="max-width:1180px;margin:0 auto;padding:70px 28px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;text-align:center;margin-bottom:48px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4d94ff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px">The problem</div>
+      <h2 style="font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.025em;color:#eef4fb">The web wasn't built for agents that pay their own way</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s,border-color .3s,box-shadow .3s;border:1px solid #1c2530;border-radius:18px;background:rgba(17,24,35,.6);padding:30px;cursor:default" style-hover="border-color:#3a4757;box-shadow:0 18px 50px -24px rgba(0,0,0,.8)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:42px;font-weight:700;color:#fca5a5;letter-spacing:-.02em" data-reveal data-count="429" data-decimals="0">0</div>
+        <div style="font-size:19px;font-weight:600;color:#eef4fb;margin-top:8px">Rate-limited</div>
+        <p style="font-size:15px;color:#9fb0c2;margin-top:8px;line-height:1.55">429 the moment you scale. Agents get throttled and IP-banned the second they scrape at volume.</p>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s .08s,transform .7s .08s,border-color .3s,box-shadow .3s;border:1px solid #1c2530;border-radius:18px;background:rgba(17,24,35,.6);padding:30px;cursor:default" style-hover="border-color:#3a4757;box-shadow:0 18px 50px -24px rgba(0,0,0,.8)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:42px;font-weight:700;color:#fca5a5;letter-spacing:-.02em">451</div>
+        <div style="font-size:19px;font-weight:600;color:#eef4fb;margin-top:8px">Geo-blocked</div>
+        <p style="font-size:15px;color:#9fb0c2;margin-top:8px;line-height:1.55">Half the web is region-walled. An agent stuck behind one IP can only ever see one slice of it.</p>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s .16s,transform .7s .16s,border-color .3s,box-shadow .3s;border:1px solid #1c2530;border-radius:18px;background:rgba(17,24,35,.6);padding:30px;cursor:default" style-hover="border-color:#3a4757;box-shadow:0 18px 50px -24px rgba(0,0,0,.8)">
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:42px;font-weight:700;color:#fca5a5;letter-spacing:-.02em">401</div>
+        <div style="font-size:19px;font-weight:600;color:#eef4fb;margin-top:8px">Key sprawl</div>
+        <p style="font-size:15px;color:#9fb0c2;margin-top:8px;line-height:1.55">Per-site auth, plans, and invoices don't fit autonomous agents. Subscriptions assume a human signs up.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section id="how" style="max-width:1000px;margin:0 auto;padding:70px 28px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;text-align:center;margin-bottom:54px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4d94ff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px">How it works</div>
+      <h2 style="font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.025em;color:#eef4fb">Four steps. The wallet is the API key.</h2>
+    </div>
+    <div data-steps style="position:relative;padding-left:26px">
+      <div style="position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:#1c2530;border-radius:2px"></div>
+      <div data-fill style="position:absolute;left:6px;top:8px;width:2px;height:0%;background:linear-gradient(180deg,#4d94ff,#60a5fa);border-radius:2px;box-shadow:0 0 12px rgba(22,119,255,.6);transition:height .15s linear"></div>
+
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;position:relative;margin-bottom:30px">
+        <div style="position:absolute;left:-26px;top:0;width:14px;height:14px;border-radius:50%;background:#0b0f14;border:2px solid #4d94ff;box-shadow:0 0 12px rgba(22,119,255,.5)"></div>
+        <div style="border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:24px 26px;margin-left:8px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#4d94ff;font-weight:700">01</span><h3 style="font-size:21px;font-weight:700;color:#eef4fb">Discover</h3></div>
+          <p style="font-size:15.5px;color:#9fb0c2;margin-top:10px;line-height:1.55">Agent GETs the free <code style="font-family:ui-monospace,Menlo,monospace;color:#4d94ff;background:rgba(22,119,255,.08);padding:1px 6px;border-radius:5px">/catalog</code> — reads the $0.001 price and the egress IP. No signup.</p>
+          <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7e8da0;background:rgba(11,15,20,.7);border:1px solid #1c2530;border-radius:10px;padding:11px 14px;overflow-x:auto">GET /catalog  →  <span style="color:#4d94ff">200</span>  { price: "$0.001", egress: "92.5.84.57" }</div>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;position:relative;margin-bottom:30px">
+        <div style="position:absolute;left:-26px;top:0;width:14px;height:14px;border-radius:50%;background:#0b0f14;border:2px solid #4d94ff;box-shadow:0 0 12px rgba(22,119,255,.5)"></div>
+        <div style="border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:24px 26px;margin-left:8px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#4d94ff;font-weight:700">02</span><h3 style="font-size:21px;font-weight:700;color:#eef4fb">Pay</h3></div>
+          <p style="font-size:15.5px;color:#9fb0c2;margin-top:10px;line-height:1.55">The unpaid request returns <code style="font-family:ui-monospace,Menlo,monospace;color:#fca5a5;background:rgba(248,113,113,.08);padding:1px 6px;border-radius:5px">402</code>. The agent signs a USDC payment from its Circle wallet and retries.</p>
+          <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7e8da0;background:rgba(11,15,20,.7);border:1px solid #1c2530;border-radius:10px;padding:11px 14px;overflow-x:auto">GET /proxy?url=…  →  <span style="color:#fca5a5">402</span>  →  pay $0.001  →  retry</div>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;position:relative;margin-bottom:30px">
+        <div style="position:absolute;left:-26px;top:0;width:14px;height:14px;border-radius:50%;background:#0b0f14;border:2px solid #4d94ff;box-shadow:0 0 12px rgba(22,119,255,.5)"></div>
+        <div style="border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:24px 26px;margin-left:8px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#4d94ff;font-weight:700">03</span><h3 style="font-size:21px;font-weight:700;color:#eef4fb">Relay</h3></div>
+          <p style="font-size:15.5px;color:#9fb0c2;margin-top:10px;line-height:1.55">Circle Gateway settles on-chain — gaslessly, we never touch a key. Bytomic forwards the fetch through its egress IP and streams the response back.</p>
+          <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7e8da0;background:rgba(11,15,20,.7);border:1px solid #1c2530;border-radius:10px;padding:11px 14px;overflow-x:auto">settle USDC  →  egress 92.5.84.57  →  <span style="color:#4d94ff">200</span> + body</div>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;position:relative">
+        <div style="position:absolute;left:-26px;top:0;width:14px;height:14px;border-radius:50%;background:#0b0f14;border:2px solid #4d94ff;box-shadow:0 0 12px rgba(22,119,255,.5)"></div>
+        <div style="border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:24px 26px;margin-left:8px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#4d94ff;font-weight:700">04</span><h3 style="font-size:21px;font-weight:700;color:#eef4fb">Receipt</h3></div>
+          <p style="font-size:15.5px;color:#9fb0c2;margin-top:10px;line-height:1.55">Every call lands in a spend ledger with its tx hash. The agent stops the moment it hits its budget cap.</p>
+          <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7e8da0;background:rgba(11,15,20,.7);border:1px solid #1c2530;border-radius:10px;padding:11px 14px;overflow-x:auto">200 + x-payment-tx: <span style="color:#60a5fa">0x7a3f…e91c</span>  ·  budget 12/100</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIVE LEDGER ===== -->
+  <section id="ledger" style="max-width:1100px;margin:0 auto;padding:70px 28px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;text-align:center;margin-bottom:44px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4d94ff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px">Live ledger</div>
+      <h2 style="font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.025em;color:#eef4fb">Both sides of every trade, on-chain</h2>
+      <p style="font-size:16px;color:#9fb0c2;max-width:54ch;margin:14px auto 0;line-height:1.55">The agent gets data, the operator gets paid — and a clickable receipt proves it.</p>
+    </div>
+    <div data-ledger data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .8s,transform .8s;border:1px solid #1c2530;border-radius:20px;background:linear-gradient(180deg,rgba(17,24,35,.85),rgba(11,15,20,.7));box-shadow:0 40px 90px -40px rgba(0,0,0,.8);overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #1c2530">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:#4d94ff;box-shadow:0 0 10px rgba(22,119,255,.9);animation:pulseDot 2s infinite"></span>Bytomic Proxy · spend ledger</div>
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#6b7888">Base · USDC</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1c2530">
+        <div style="background:#0e151e;padding:22px 24px"><div style="font-size:13px;color:#6b7888;font-family:ui-monospace,Menlo,monospace">Earned</div><div data-earn-stat data-count="0.019" data-decimals="4" data-prefix="$" style="font-size:34px;font-weight:700;color:#4d94ff;letter-spacing:-.02em;margin-top:4px">$0.0000</div></div>
+        <div style="background:#0e151e;padding:22px 24px"><div style="font-size:13px;color:#6b7888;font-family:ui-monospace,Menlo,monospace">Paid calls</div><div data-paid data-count="19" data-decimals="0" style="font-size:34px;font-weight:700;color:#eef4fb;letter-spacing:-.02em;margin-top:4px">0</div></div>
+        <div style="background:#0e151e;padding:22px 24px"><div style="font-size:13px;color:#6b7888;font-family:ui-monospace,Menlo,monospace">Agents</div><div data-count="3" data-decimals="0" style="font-size:34px;font-weight:700;color:#eef4fb;letter-spacing:-.02em;margin-top:4px">0</div></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-width:680px">
+          <thead><tr style="color:#6b7888;text-align:left">
+            <th style="padding:13px 24px;font-weight:500">Time</th><th style="padding:13px 16px;font-weight:500">Payer</th><th style="padding:13px 16px;font-weight:500">USDC</th><th style="padding:13px 16px;font-weight:500">Target</th><th style="padding:13px 16px;font-weight:500">Status</th><th style="padding:13px 24px;font-weight:500">Tx</th>
+          </tr></thead>
+          <tbody>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:02:11</td><td style="padding:13px 16px;color:#9fb0c2">0x9f…a4</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">api.weather.gov/points</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0x7a3f…e91c</td></tr>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:02:09</td><td style="padding:13px 16px;color:#9fb0c2">0x3b…7c</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">httpbin.org/ip</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0x91c2…4d0a</td></tr>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:02:04</td><td style="padding:13px 16px;color:#9fb0c2">0xa1…ff</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">api.coingecko.com/ping</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0x5e8b…1f33</td></tr>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:01:58</td><td style="padding:13px 16px;color:#9fb0c2">0x9f…a4</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">tavily.com/search</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0x2d77…9ab4</td></tr>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:01:51</td><td style="padding:13px 16px;color:#9fb0c2">0xc4…12</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">api.weather.gov/points</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0x8f01…6c2e</td></tr>
+            <tr data-ledger-row style="border-top:1px solid #161f29"><td style="padding:13px 24px;color:#9fb0c2">14:01:46</td><td style="padding:13px 16px;color:#9fb0c2">0x3b…7c</td><td style="padding:13px 16px;color:#4d94ff">0.001</td><td style="padding:13px 16px;color:#d7e0ea">ip-api.com/json</td><td style="padding:13px 16px"><span style="color:#4d94ff;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.25);padding:2px 9px;border-radius:999px">200</span></td><td style="padding:13px 24px;color:#60a5fa">0xbe34…07d9</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STACK / WHY IT WINS ===== -->
+  <section style="max-width:1100px;margin:0 auto;padding:70px 28px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;text-align:center;margin-bottom:44px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4d94ff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px">Why it wins</div>
+      <h2 style="font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.025em;color:#eef4fb">Standing on the Circle agent stack</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s,border-color .3s;border:1px solid #1c2530;border-radius:14px;background:rgba(17,24,35,.6);padding:22px" style-hover="border-color:#3a4757"><div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4d94ff;margin-bottom:8px">Circle Agent Wallet</div><div style="font-size:14.5px;color:#9fb0c2;line-height:1.5">The agent's payment identity &amp; budget.</div></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .06s,transform .6s .06s,border-color .3s;border:1px solid #1c2530;border-radius:14px;background:rgba(17,24,35,.6);padding:22px" style-hover="border-color:#3a4757"><div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4d94ff;margin-bottom:8px">x402</div><div style="font-size:14.5px;color:#9fb0c2;line-height:1.5">HTTP-native 402 payments per call.</div></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .12s,transform .6s .12s,border-color .3s;border:1px solid #1c2530;border-radius:14px;background:rgba(17,24,35,.6);padding:22px" style-hover="border-color:#3a4757"><div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4d94ff;margin-bottom:8px">Circle Gateway</div><div style="font-size:14.5px;color:#9fb0c2;line-height:1.5">Gasless USDC settlement, no key held.</div></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .18s,transform .6s .18s,border-color .3s;border:1px solid #1c2530;border-radius:14px;background:rgba(17,24,35,.6);padding:22px" style-hover="border-color:#3a4757"><div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4d94ff;margin-bottom:8px">Claude Agent SDK</div><div style="font-size:14.5px;color:#9fb0c2;line-height:1.5">The autonomous buyer driving it all.</div></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .24s,transform .6s .24s,border-color .3s;border:1px solid #1c2530;border-radius:14px;background:rgba(17,24,35,.6);padding:22px" style-hover="border-color:#3a4757"><div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#4d94ff;margin-bottom:8px">Base</div><div style="font-size:14.5px;color:#9fb0c2;line-height:1.5">On-chain receipts for every fetch.</div></div>
+    </div>
+  </section>
+
+  <!-- ===== USE CASES ===== -->
+  <section style="max-width:1100px;margin:0 auto;padding:30px 28px 70px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;text-align:center;margin-bottom:40px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4d94ff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px">Use cases</div>
+      <h2 style="font-size:clamp(26px,3.6vw,40px);font-weight:700;letter-spacing:-.025em;color:#eef4fb">Any agent that needs an IP that isn't its own</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s,max-height .35s ease,border-color .3s;border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:22px;max-height:84px;overflow:hidden;cursor:pointer" style-hover="max-height:220px;border-color:#4d94ff"><div style="font-size:17px;font-weight:600;color:#eef4fb">Research agents</div><p style="font-size:14.5px;color:#9fb0c2;margin-top:12px;line-height:1.55">Reach paywalled and geo-restricted data sources that block a datacenter IP on sight.</p></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .06s,transform .6s .06s,max-height .35s ease,border-color .3s;border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:22px;max-height:84px;overflow:hidden;cursor:pointer" style-hover="max-height:220px;border-color:#4d94ff"><div style="font-size:17px;font-weight:600;color:#eef4fb">Market scrapers</div><p style="font-size:14.5px;color:#9fb0c2;margin-top:12px;line-height:1.55">Pull prices and listings at volume, dodging the 429s that kill a single-IP crawler.</p></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .12s,transform .6s .12s,max-height .35s ease,border-color .3s;border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:22px;max-height:84px;overflow:hidden;cursor:pointer" style-hover="max-height:220px;border-color:#4d94ff"><div style="font-size:17px;font-weight:600;color:#eef4fb">QA agents</div><p style="font-size:14.5px;color:#9fb0c2;margin-top:12px;line-height:1.55">Geo-test a product from many exits — verify what a user in another region actually sees.</p></div>
+      <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .6s .18s,transform .6s .18s,max-height .35s ease,border-color .3s;border:1px solid #1c2530;border-radius:16px;background:rgba(17,24,35,.6);padding:22px;max-height:84px;overflow:hidden;cursor:pointer" style-hover="max-height:220px;border-color:#4d94ff"><div style="font-size:17px;font-weight:600;color:#eef4fb">Any autonomous agent</div><p style="font-size:14.5px;color:#9fb0c2;margin-top:12px;line-height:1.55">Metered egress is a primitive: pay cents per call, no plan, no key, the wallet is the access.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FOOTER ===== -->
+  <footer style="max-width:1100px;margin:0 auto;padding:40px 28px 90px">
+    <div data-reveal style="opacity:0;transform:translateY(16px);transition:opacity .8s,transform .8s;position:relative;border:1px solid #1c2530;border-radius:24px;background:linear-gradient(180deg,rgba(22,119,255,.06),rgba(17,24,35,.7));padding:70px 32px;text-align:center;overflow:hidden">
+      <div style="position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:60%;height:120%;background:radial-gradient(circle,rgba(22,119,255,.18),transparent 65%);filter:blur(40px);pointer-events:none"></div>
+      <h2 style="position:relative;font-size:clamp(34px,5.4vw,60px);font-weight:800;letter-spacing:-.035em;background:linear-gradient(180deg,#f4f9ff,#aebccd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Give your agent an exit.</h2>
+      <div style="position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px">
+        <a data-magnetic href="/dashboard" style="display:inline-flex;align-items:center;gap:9px;padding:15px 28px;border-radius:12px;background:#1677FF;color:#fff;font-weight:700;font-size:16px;transition:box-shadow .25s,transform .12s;box-shadow:0 8px 28px -8px rgba(22,119,255,.55)" style-hover="box-shadow:0 14px 44px -6px rgba(22,119,255,.8)">Launch demo →</a>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:40px;padding-top:28px;border-top:1px solid #161f29;color:#6b7888;font-size:13.5px">
+      <div style="display:flex;align-items:center;gap:9px;font-weight:600;color:#9fb0c2"><img src="assets/logo.svg" alt="" style="width:20px;height:20px;display:block">Bytomic <span style="color:#4d94ff">Proxy</span></div>
+      <a href="https://bytomic.tech" target="_blank" style="font-family:ui-monospace,Menlo,monospace;transition:color .2s" style-hover="color:#4d94ff">Built by team Bytomic · bytomic.tech</a>
+    </div>
+  </footer>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('dc-root');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // style-hover: additive inline styles on hover, restored on leave.
+  root.querySelectorAll('[style-hover]').forEach(function (el) {
+    var base = el.getAttribute('style') || '';
+    var hov = el.getAttribute('style-hover');
+    el.addEventListener('mouseenter', function () { el.setAttribute('style', base + ';' + hov); });
+    el.addEventListener('mouseleave', function () { el.setAttribute('style', base); });
+  });
+
+  function setFinal(el) {
+    var t = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    el.textContent = pre + t.toFixed(dec) + suf;
+  }
+  function countUp(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    var dur = 1300, t0 = performance.now();
+    function tick(t) {
+      var p = Math.min(1, (t - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (target * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  if (reduce) {
+    root.querySelectorAll('*').forEach(function (el) { el.style.animation = 'none'; });
+    root.querySelectorAll('[data-reveal]').forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+    root.querySelectorAll('[data-count]').forEach(setFinal);
+    var fl0 = root.querySelector('[data-fill]'); if (fl0) fl0.style.height = '100%';
+    return;
+  }
+
+  var revealEls = Array.prototype.slice.call(root.querySelectorAll('[data-reveal]'));
+  function reveal(el) {
+    el.style.opacity = '1'; el.style.transform = 'none'; el.__revealed = true;
+    if (el.hasAttribute('data-count')) countUp(el);
+  }
+  function checkReveal() {
+    var vh = window.innerHeight;
+    revealEls.forEach(function (el) {
+      if (el.__revealed) return;
+      var r = el.getBoundingClientRect();
+      if (r.top < vh * 0.92 && r.bottom > 0) reveal(el);
+    });
+  }
+  checkReveal();
+  requestAnimationFrame(checkReveal);
+  window.addEventListener('scroll', checkReveal, { passive: true });
+  window.addEventListener('resize', checkReveal);
+  setTimeout(function () { revealEls.forEach(function (el) { if (!el.__revealed) reveal(el); }); }, 2500);
+
+  // magnetic buttons
+  root.querySelectorAll('[data-magnetic]').forEach(function (btn) {
+    btn.addEventListener('mousemove', function (ev) {
+      var r = btn.getBoundingClientRect();
+      var x = ev.clientX - r.left - r.width / 2;
+      var y = ev.clientY - r.top - r.height / 2;
+      btn.style.transform = 'translate(' + (x * 0.28) + 'px,' + (y * 0.4) + 'px)';
+    });
+    btn.addEventListener('mouseleave', function () { btn.style.transform = 'translate(0,0)'; });
+  });
+
+  // hero wire scale-to-fit
+  var stage = root.querySelector('[data-wire-stage]');
+  function fit() {
+    if (!stage) return;
+    var wrap = stage.parentElement;
+    var s = Math.min(1, wrap.clientWidth / 880);
+    stage.style.transform = 'scale(' + s + ')';
+    wrap.style.height = (220 * s) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+
+  // hero earned counter ticks each wire loop
+  var earned = root.querySelector('[data-earned]');
+  if (earned) { var n = 0.014; setInterval(function () { n += 0.001; earned.textContent = '$' + n.toFixed(3); }, 9000); }
+
+  // live ledger loop
+  var rows = Array.prototype.slice.call(root.querySelectorAll('[data-ledger-row]'));
+  var paidEl = root.querySelector('[data-paid]');
+  var earnEl = root.querySelector('[data-earn-stat]');
+  var paid = 19, earn = 0.019, ledgerStarted = false;
+  function playRows() {
+    rows.forEach(function (r, i) {
+      r.style.animation = 'none'; void r.offsetWidth;
+      r.style.animation = 'ledgerRow .55s cubic-bezier(.2,.7,.2,1) both';
+      r.style.animationDelay = (i * 0.1) + 's';
+    });
+  }
+  var ledger = root.querySelector('[data-ledger]');
+  function startLedger(force) {
+    if (ledgerStarted || !ledger) return;
+    if (!force) {
+      var r = ledger.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.85 || r.bottom < 0) return;
+    }
+    ledgerStarted = true;
+    playRows();
+    setInterval(function () {
+      paid += 1; earn += 0.001;
+      if (paidEl) paidEl.textContent = String(paid);
+      if (earnEl) earnEl.textContent = '$' + earn.toFixed(4);
+      playRows();
+    }, 4600);
+  }
+  startLedger();
+  window.addEventListener('scroll', startLedger, { passive: true });
+
+  // how-it-works fill line on scroll
+  var fillLine = root.querySelector('[data-fill]');
+  var stepsWrap = root.querySelector('[data-steps]');
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      if (!fillLine || !stepsWrap) return;
+      var r = stepsWrap.getBoundingClientRect();
+      var prog = Math.max(0, Math.min(1, (window.innerHeight * 0.55 - r.top) / r.height));
+      fillLine.style.height = (prog * 100) + '%';
+    });
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
+</body>
+</html>

@@ -1,10 +1,15 @@
 import 'dotenv/config';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import express from 'express';
 import { formatUnits } from 'viem';
 import { createGatewayMiddleware, type PaymentRequest } from '@circle-fin/x402-batching/server';
 
 import { record, all, totals, grandTotalUsdc, type Receipt } from './ledger.ts';
 import { DASHBOARD_HTML } from './dashboard.ts';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const PUBLIC_DIR = join(__dirname, '..', 'public');
 
 const SELLER = required('SELLER_WALLET_ADDRESS');
 const FACILITATOR_URL = process.env.FACILITATOR_URL || 'https://gateway-api.circle.com';
@@ -160,10 +165,18 @@ app.get('/ledger', (_req, res) => {
   res.json({ egressIp: EGRESS_IP, grandTotalUsdc: grandTotalUsdc(), totals: totals(), receipts: all() });
 });
 
-/** Live human dashboard. */
-app.get('/', (_req, res) => {
+/** Live human dashboard (moved off / to make room for the marketing landing). */
+app.get('/dashboard', (_req, res) => {
   res.set('content-type', 'text/html').send(DASHBOARD_HTML);
 });
+
+/**
+ * Static marketing site: landing at `/` (public/index.html) and the pitch deck
+ * at `/deck` (public/deck.html), plus shared `/assets`. Registered AFTER the API
+ * routes so /catalog, /proxy, /ledger, /dashboard always win.
+ */
+app.get('/deck', (_req, res) => res.sendFile(join(PUBLIC_DIR, 'deck.html')));
+app.use(express.static(PUBLIC_DIR));
 
 function safeFormatUsdc(atomic: string): string {
   try {
@@ -181,7 +194,9 @@ app.listen(PORT, () => {
   console.log(`  seller wallet    ${SELLER}`);
   console.log(`  facilitator      ${FACILITATOR_URL}`);
   console.log(`  networks         ${NETWORKS.length ? NETWORKS.join(', ') : 'all Gateway-supported'}`);
-  console.log(`\n  discovery   GET ${PUBLIC_URL}/catalog   (free)`);
-  console.log(`  paid proxy  GET ${PUBLIC_URL}/proxy?url=<target>   (${PRICE})`);
-  console.log(`  dashboard       ${PUBLIC_URL}/\n`);
+  console.log(`\n  landing         ${PUBLIC_URL}/`);
+  console.log(`  deck            ${PUBLIC_URL}/deck`);
+  console.log(`  dashboard       ${PUBLIC_URL}/dashboard`);
+  console.log(`  discovery   GET ${PUBLIC_URL}/catalog   (free)`);
+  console.log(`  paid proxy  GET ${PUBLIC_URL}/proxy?url=<target>   (${PRICE})\n`);
 });

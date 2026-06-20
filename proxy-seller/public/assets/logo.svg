@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <mask id="dot-gap-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <rect width="512" height="512" fill="white"></rect>
+      <circle cx="378" cy="386" r="39" fill="black"></circle>
+    </mask>
+  </defs>
+  <g mask="url(#dot-gap-mask)">
+    <path d="M176 202V160C176 95 213 64 256 64C299 64 336 95 336 160V202" stroke="#F7F7F7" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"></path>
+    <rect x="130" y="202" width="252" height="188" rx="46" stroke="#F7F7F7" stroke-width="42" stroke-linejoin="round"></rect>
+  </g>
+  <circle cx="378" cy="386" r="25" fill="#1677FF"></circle>
+</svg>
