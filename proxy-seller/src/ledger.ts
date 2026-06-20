@@ -1,9 +1,12 @@
-import { appendFileSync, existsSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const LEDGER_FILE = join(__dirname, '..', 'ledger.jsonl');
+// LEDGER_FILE: point at a Coolify persistent volume (e.g. /app/data/ledger.jsonl)
+// so the running ledger survives redeploys; defaults to the repo root for local dev.
+const LEDGER_FILE = process.env.LEDGER_FILE || join(__dirname, '..', 'ledger.jsonl');
+try { mkdirSync(dirname(LEDGER_FILE), { recursive: true }); } catch { /* dir exists */ }
 
 /**
  * One paid proxy call. This IS the receipt the agent (and the judges) get back:
