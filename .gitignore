@@ -3,3 +3,5 @@ node_modules/
 *.log
 proxy-seller/ledger.jsonl
 .DS_Store
+
+proxy-seller/SELLER_WALLET.local.txt
